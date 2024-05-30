@@ -17,7 +17,7 @@
 * Tookit: Langchain [[Repo](https://github.com/langchain-ai/langchain)] [[Homepage](https://www.langchain.com/)]
 * Model: Llama-3-Chinese-Instruct [[Repo](https://github.com/ymcui/Chinese-LLaMA-Alpaca-3)]
 ### TTS
-语音合成系统采用是使用ESPnet工具包训练的端到端的语音合成模型, 模型架构采用的是 FastSpeech2 + HifiGAN, 使用的是 JETS 训练方法从而避免了传统二阶段语音合成系统 mel 谱 miss match 的问题。
+语音合成系统采用是使用ESPnet工具包训练的端到端的语音合成模型, 模型架构采用的是 FastSpeech2 + HifiGAN, 使用的是 JETS 训练方法从而避免了传统二阶段语音合成系统中声学模型和声码器之间 mel 谱mismatch的问题。
 * Toolkit: ESPnet [[Repo](https://github.com/espnet/espnet)] [[Paper](https://arxiv.org/abs/1804.00015)]
 * Dataset: CSMSC [[Homepage](https://www.data-baker.com/open_source.html)]
 * Model: FastSpeech2 + HifiGAN
