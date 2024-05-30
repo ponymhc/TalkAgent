@@ -9,8 +9,8 @@
 ### ASR
 该项目的语音识别系统是使用 ESPnet 开源工具包训练的一个端到端语音识别模型。使用 LoRA 在中文语音转写数据集上微调的 Whisper 模型实现高精度的普通话语音转写。
 * Toolkit: ESPnet
-        * repo: https://github.com/espnet/espnet
-        *  paper: https://arxiv.org/abs/1804.00015
+       * repo: https://github.com/espnet/espnet
+       *  paper: https://arxiv.org/abs/1804.00015
 * Dataset: AIShell
         * homepage: https://www.openslr.org/33/
         * paper: https://arxiv.org/abs/1709.05522
