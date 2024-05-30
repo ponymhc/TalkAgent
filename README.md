@@ -9,14 +9,15 @@
 ### ASR
 该项目的语音识别系统是使用 ESPnet 开源工具包训练的一个端到端语音识别模型。使用 LoRA 在中文语音转写数据集上微调的 Whisper 模型实现高精度的普通话语音转写。
 * Toolkit: ESPnet
-  * repo: https://github.com/espnet/espnet
-  * paper: https://arxiv.org/abs/1804.00015
+  * [repo](https://github.com/espnet/espnet)
+  * [paper](https://arxiv.org/abs/1804.00015)
 * Dataset: AIShell
-  * homepage: https://www.openslr.org/33/
-  * paper: https://arxiv.org/abs/1709.05522
+  * [homepage](https://www.openslr.org/33/)
+  * [paper](https://arxiv.org/abs/1709.05522)
 * Model: Whisper
-  * repo: https://github.com/openai/whisper
-  * paper: https://arxiv.org/abs/2212.04356
+  * [repo](https://github.com/openai/whisper)
+  * [paper](https://arxiv.org/abs/2212.04356)
+
 ### ChatBot
 聊天机器人是基于 Chinese-Llama3 Instruction 版本构建的, 在此基础上使用 Langchain 构建了一个主动型 Agent, 可以根据用户输入进行自主决策采用的行为以便更智能化地回答用户问题。
 ### TTS
