@@ -13,7 +13,7 @@
 * Model: Whisper [[Repo](https://github.com/openai/whisper)] [[Paper](https://arxiv.org/abs/2212.04356)]
 
 ### ChatBot
-聊天机器人是基于 Chinese-Llama3 Instruct 4 bit 量化版本构建的, 在此基础上使用 Langchain 构建了一个主动型 Agent, 可以根据用户输入进行自主决策采用的行为以便更智能化地回答用户问题。
+聊天机器人是基于 Llama-3-Chinese-Instruct 4 bit 量化版本构建的, 在此基础上使用 Langchain 构建了一个主动型 Agent, 可以根据用户输入进行自主决策采用的行为以便更智能化地回答用户问题。
 * Tookit: Langchain [[Repo](https://github.com/langchain-ai/langchain)] [[Homepage](https://www.langchain.com/)]
 * Model: Llama-3-Chinese-Instruct [[Repo](https://github.com/ymcui/Chinese-LLaMA-Alpaca-3)]
 ### TTS
