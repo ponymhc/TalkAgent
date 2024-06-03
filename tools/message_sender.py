@@ -2,6 +2,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
 from email.utils import parseaddr, formataddr
+import json
 
 def _format_addr(s):
     name, addr = parseaddr(s)
@@ -12,7 +13,7 @@ def message_sender(reciver_addr, subject, content):
     smtpObj.ehlo()
     smtpObj.starttls()
 
-    email_config = open('email_config.json', 'r')
+    email_config = json.load(open('email_config.json', 'r'))
     email_addr = email_config['email_addr']
     secret_key = email_config['secret_key']
     smtpObj.login(email_addr, secret_key)
@@ -20,9 +21,13 @@ def message_sender(reciver_addr, subject, content):
     from_addr = email_addr
     to_addr = reciver_addr
 
+    sender_name = from_addr.split('@')[0]
+    reciver_name = to_addr.split('@')[0]
+
+
     message = MIMEText(content, 'plain', 'utf-8')
-    message['From'] = _format_addr('Pony <%s>' % from_addr)
-    message['To'] =  _format_addr('Pony2 <%s>' % to_addr)
+    message['From'] = _format_addr(f'{sender_name} {from_addr}')
+    message['To'] =  _format_addr(f'{reciver_name} {to_addr}')
 
     message['Subject'] = Header(subject, 'utf-8')
 
@@ -31,4 +36,4 @@ def message_sender(reciver_addr, subject, content):
     smtpObj.quit()
 
 if __name__ == '__main__':
-    message_sender('ponymhc@163.com', 'test', 'test message')
+    message_sender('xxxx@xxx.com', 'test', 'test message')
