@@ -11,7 +11,7 @@ from tools.reranker import Reranker
 
 import os
 
-retrieval_prompt = """
+retrieval_prompt_template = """
 请根据下面的上下文内容回答问题：
 
 上下文：
@@ -28,7 +28,7 @@ class RetrievalQATool():
     def __init__(self, args, llm):
         self.conf = args
         self.prompt_builder = Llama3PromptBuilder('你是一个智能机器人，可以检索文档并根据检索结果回答问题。')
-        self.prompt = self.prompt_builder.build_chat_prompt(retrieval_prompt)
+        self.prompt = self.prompt_builder.build_chat_prompt(retrieval_prompt_template)
         self.embedding = SentenceTransformerEmbeddings(model_name=self.conf.embedding_path)
         self.db = self._init_db()
         self.retriever = self.db.as_retriever(search_kwargs={'top_k': self.conf.stage1_top_k})

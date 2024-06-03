@@ -2,7 +2,7 @@ from langchain.agents import AgentExecutor, create_react_agent
 from langchain_core.prompts import PromptTemplate
 
 
-agent_prompt = """Answer the following questions as best you can. You have access to the following tools:
+agent_prompt_template = """Answer the following questions as best you can. You have access to the following tools:
 
 {tools}
 
@@ -25,17 +25,19 @@ Thought: {agent_scratchpad}
 
 
 class LlmApplications():
-    def __init__(self, tools, llm):
+    def __init__(self, tools, llm, args):
         """
         tools: a list of Tool objects
         """
+        self.conf = args
         self.tools = self._build_tools(tools)
         agent = create_react_agent(
                             llm=llm,
                             tools=self.tools,
-                            prompt=PromptTemplate.from_template(agent_prompt)
+                            prompt=PromptTemplate.from_template(agent_prompt_template),
+                            stop_sequence=['\nObservation', '\n\nObservation', 'Observation']
                             )
-        self.agent_executor = AgentExecutor(agent=agent, tools=self.tools)
+        self.agent_executor = AgentExecutor(agent=agent, tools=self.tools, max_iterations=self.conf.agent_max_iters)
 
     def _build_tools(self, tools):
         Tools = []

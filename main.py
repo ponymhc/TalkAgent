@@ -3,7 +3,8 @@ from langchain.callbacks.manager import Callbacks
 from langchain_community.llms import LlamaCpp
 from langchain_community.vectorstores import Chroma
 from src.applications import LlmApplications
-from src.callback import StreamingStdOutCallbackHandler
+from src.callback import FinalStreamingStdOutCallbackHandler
+from src.conversation import Conversation
 
 import threading
 import langchain
@@ -15,7 +16,7 @@ from tools.retrieval import RetrievalQATool
 from tools.weather import WeatherTool
 from tools.chat import ChatTool
 
-from langchain.globals import set_debug
+from langchain.globals import set_debug, set_verbose
 
 
 
@@ -32,6 +33,7 @@ def get_args():
     parser.add_argument("--docs_path", type=str, default='/home/pony/workspace/nlp/data/luxun', help="documents path")
     parser.add_argument("--stage1_top_k", type=int, default=20, help="top k chunks for stage 1 in retrieval use embedding model")
     parser.add_argument("--stage2_top_k", type=int, default=3, help="top k chunks for stage 2 in retrieval use reranker model")
+    parser.add_argument("--agent_max_iters", type=int, default=3, help="the maximum number of self ask iterations for agent")
     parser.add_argument("--debug", type=str, choices=['true', 'false'], default='true', help="debug mode")
 
     args = parser.parse_args()
@@ -41,7 +43,12 @@ def main():
     args = get_args()
     if args.debug == 'true':
         set_debug(True)
-    streamcallback = StreamingStdOutCallbackHandler()
+        set_verbose(True)
+    else:
+        set_debug(False)
+        set_verbose(False)
+
+    streamcallback = FinalStreamingStdOutCallbackHandler()
     callback_manager = CallbackManager([streamcallback])
     consumer_thread = threading.Thread(target=streamcallback.consumer)
     consumer_thread.start()
@@ -64,8 +71,12 @@ def main():
              weather_tool, 
              retrieval_qa_tool
              ]
-    application = LlmApplications(tools, llm)
-    application('帮我用维基百科查询一下太阳黑子运动的定义。')
+    
+    application = LlmApplications(tools, llm, args)
+    conversation = Conversation(llm, application)
+    while True:
+        inputs = input("input: ")
+        conversation(inputs)
 
 if __name__ == "__main__":
     main()

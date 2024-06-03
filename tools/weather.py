@@ -3,7 +3,7 @@ import requests
 from src.utils import build_output_parser, Llama3PromptBuilder
 from langchain.agents import Tool
 
-format_city_prompt = """
+format_city_prompt_template = """
 从下面的文本中提取出想要查询的天气的城市的名称是什么。
 文本: 
 {question}
@@ -19,7 +19,7 @@ class WeatherTool():
 		self.llm = llm
 		self.output_parser, self.format_instructions = build_output_parser({'city': '城市名称'})
 		self.prompt_builder = Llama3PromptBuilder('你是一个智能助手，可以根据城市名称查询天气信息和天气预报。')
-		self.format_city_prompt = self.prompt_builder.build_chat_prompt(format_city_prompt)
+		self.format_city_prompt = self.prompt_builder.build_chat_prompt(format_city_prompt_template)
 		self.chain = (
 			self.format_city_prompt
 			| self.llm
