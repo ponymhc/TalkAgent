@@ -1,2 +1,4 @@
 models/
 faiss_db/
+tools/email_config.json
+**/__pycache__
