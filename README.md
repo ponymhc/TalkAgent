@@ -35,7 +35,9 @@ cmake -B build -DLLAMA_CUDA=ON
 cmake --build build --config Release
 ```
 安装运行所需依赖项。
+```
 pip install -r requirements.txt
+```
 现在，只需运行run.sh即可！！！
 ```
 sh run.sh
