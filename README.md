@@ -7,7 +7,7 @@
 
 ## 功能介绍
 ### ASR
-语音识别系统是使用 ESPnet 开源工具包训练的一个端到端语音识别模型。使用 LoRA 在中文语音转写数据集上微调的 Whisper 模型实现高精度的普通话语音转写。
+语音识别系统是使用 ESPnet 开源工具包训练的一个端到端语音识别模型。使用 LoRA 在中文语音转写数据集上微调的 Whisper 模型实现较高精度的普通话语音转写。
 * Toolkit: ESPnet [[Repo](https://github.com/espnet/espnet)] [[Paper](https://arxiv.org/abs/1804.00015)]
 * Dataset: AIShell [[Homepage](https://www.openslr.org/33/)] [[Paper](https://arxiv.org/abs/1709.05522)]
 * Model: Whisper [[Repo](https://github.com/openai/whisper)] [[Paper](https://arxiv.org/abs/2212.04356)]
