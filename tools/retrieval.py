@@ -75,7 +75,7 @@ class RetrievalQATool():
 
     def tool_wrapper(self):
         tool = Tool(
-            name='Wikipedia Retriever',
+            name='Retriever',
             func=self.chain.invoke,
             description='用于知识库检索问答。'
         )
