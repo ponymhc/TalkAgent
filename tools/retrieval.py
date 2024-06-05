@@ -61,10 +61,8 @@ class RetrievalQATool():
                                         separator='\n'
                                     )
                 docs = text_splitter.split_documents(docs)
-                # index = faiss.IndexIVFPQ()
                 db = FAISS.from_documents(docs, 
-                                          self.embedding, 
-                                        #   index=index
+                                          self.embedding
                                           )
                 db.save_local(self.conf.db_path)
             except:
