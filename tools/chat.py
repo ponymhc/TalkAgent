@@ -12,7 +12,7 @@ class ChatTool():
         tool = Tool(
             name='Language Model',
             func=self.chain.invoke,
-            description='用于一般指令或聊天。'
+            description='用于聊天。'
         )
         return tool
     

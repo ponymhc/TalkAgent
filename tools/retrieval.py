@@ -79,6 +79,6 @@ class RetrievalQATool():
         tool = Tool(
             name='Wikipedia Retriever',
             func=self.chain.invoke,
-            description='用于检索中文维基百科，当被问道非常识性问题或专业名词解释等问题的时候，优先选择此工具检索维基百科，并用检索到的知识辅助回答问题。'
+            description='用于知识库检索问答。'
         )
         return tool

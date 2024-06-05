@@ -2,38 +2,92 @@ import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
 from email.utils import parseaddr, formataddr
+from src.utils import build_output_parser, Llama3PromptBuilder
+from langchain.agents import Tool
 import json
 
-def _format_addr(s):
-    name, addr = parseaddr(s)
-    return formataddr((Header(name, 'utf-8').encode(), addr))
+format_email_prompt_template = """
+从下面的文本中提取出收件人邮箱地址，邮件主题以及邮件内容。
 
-def message_sender(reciver_addr, subject, content):
-    smtpObj = smtplib.SMTP('smtp.qq.com',587)
-    smtpObj.ehlo()
-    smtpObj.starttls()
+注意：如果文本中未明确提及邮件主题，则根据邮件内容总结出合适的主题。
 
-    email_config = json.load(open('email_config.json', 'r'))
-    email_addr = email_config['email_addr']
-    secret_key = email_config['secret_key']
-    smtpObj.login(email_addr, secret_key)
-
-    from_addr = email_addr
-    to_addr = reciver_addr
-
-    sender_name = from_addr.split('@')[0]
-    reciver_name = to_addr.split('@')[0]
+文本: 
+{question}
+输出应该是遵守以下模式的代码片段，包括开头和结尾的"```json"和"```":
+```json
+{{
+	"receiver_addr": string  // 收件人邮箱,
+    "subject": string // 邮件主题,
+    "content": string // 邮件内容,
+}}
+```"""
 
 
-    message = MIMEText(content, 'plain', 'utf-8')
-    message['From'] = _format_addr(f'{sender_name} {from_addr}')
-    message['To'] =  _format_addr(f'{reciver_name} {to_addr}')
+class EmailTool:
+    def __init__(self, llm):
+        self.llm = llm
+        self.email_config = 'tools/email_config.json'
+        self.output_parser, self.format_instructions = build_output_parser({
+                                                                            "receiver_addr":'接收邮箱',
+                                                                            "subject":'邮件主题',
+                                                                            "content":'邮件内容',
+                                                                            })
+        self.prompt_builder = Llama3PromptBuilder('你是一个智能助手，可以帮助用户发送邮件。')
+        self.sender_addr, self.secret_key = self._load_email_config()
+        self.format_email_prompt = self.prompt_builder.build_chat_prompt(format_email_prompt_template)
+        self.chain = (
+			self.format_email_prompt
+			| self.llm
+			| self.output_parser
+			| self.send_message
+		)
 
-    message['Subject'] = Header(subject, 'utf-8')
+    def _load_email_config(self):
+        email_config = json.load(open(self.email_config, 'r'))
+        email_addr = email_config['email_addr']
+        secret_key = email_config['secret_key']
+        return email_addr, secret_key
 
-    smtpObj.sendmail(from_addr, [to_addr], message.as_string())
+    def _format_addr(self, s):
+        name, addr = parseaddr(s)
+        return formataddr((Header(name, 'utf-8').encode(), addr))
 
-    smtpObj.quit()
+    def send_message(self, schema):
+        try:
+            smtpObj = smtplib.SMTP('smtp.qq.com',587)
+            smtpObj.ehlo()
+            smtpObj.starttls()
 
-if __name__ == '__main__':
-    message_sender('xxxx@xxx.com', 'test', 'test message')
+            smtpObj.login(self.sender_addr, self.secret_key)
+            from_addr = self.sender_addr
+            to_addr = schema['receiver_addr']
+
+            sender_name = from_addr.split('@')[0]
+            receiver_name = to_addr.split('@')[0]
+
+            message = MIMEText(schema['content'], 'plain', 'utf-8')
+            message['From'] = self._format_addr(f'{sender_name} {from_addr}')
+            message['To'] =  self._format_addr(f'{receiver_name} {to_addr}')
+
+            message['Subject'] = Header(schema['subject'], 'utf-8')
+
+            smtpObj.sendmail(from_addr, [to_addr], message.as_string())
+
+            smtpObj.quit()
+            return {
+                'success': True,
+                'message': '邮件发送成功。'
+            }
+        except:
+            return {
+                'success': False,
+                'message': '邮件发送失败，请重新尝试'
+            }
+    
+    def tool_wrapper(self):
+        tool = Tool(
+            name='Email',
+            func=self.chain.invoke,
+            description='用来发送邮件。'
+        )
+        return tool

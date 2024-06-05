@@ -28,9 +28,9 @@ class WeatherTool():
 		)
 		self.cities = json.load(open('tools/city_code.json', 'rb'))
 
-	def get_weather_info(self, city):
+	def get_weather_info(self, schema):
 		url = 'http://t.weather.sojson.com/api/weather/city/'
-		city = city['city']
+		city = schema['city']
 		city = city.replace('市','')
 		city_code = self.cities.get(city)
 		if city_code is None:
@@ -50,6 +50,7 @@ class WeatherTool():
 				return {}
 		except requests.exceptions.Timeout:
 			print("请求超时，请稍后重试。")
+			return {}
 
 	def tool_wrapper(self):
 		tool = Tool(

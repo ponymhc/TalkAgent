@@ -15,6 +15,7 @@ import argparse
 from tools.retrieval import RetrievalQATool
 from tools.weather import WeatherTool
 from tools.chat import ChatTool
+from tools.message_sender import EmailTool
 
 from langchain.globals import set_debug, set_verbose
 
@@ -65,18 +66,23 @@ def main():
     chat_tool = ChatTool(llm)
     retrieval_qa_tool = RetrievalQATool(args, llm)
     weather_tool = WeatherTool(llm)
+    email_tool = EmailTool(llm)
     
     tools = [
             chat_tool, 
              weather_tool, 
-             retrieval_qa_tool
+             retrieval_qa_tool,
+             email_tool
              ]
     
     application = LlmApplications(tools, llm, args)
     conversation = Conversation(llm, application)
     while True:
-        inputs = input("input: ")
-        conversation(inputs)
+        inputs = input("> ")
+        if inputs == "exit":
+            break
+        else:
+            conversation(inputs)
 
 if __name__ == "__main__":
     main()
