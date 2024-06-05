@@ -19,6 +19,8 @@
 * Embedding:
 * Reranker
 * Inference framework: Llama.cpp [[Repo](https://github.com/ggerganov/llama.cpp)]
+二阶段检索增强生成
+![Two stage RAG](https://github.com/ponymhc/AudioLlama/blob/main/image/two_stage_retrieval.jpg)
 ### TTS
 语音合成系统采用是使用ESPnet工具包训练的端到端的语音合成模型, 模型架构采用的是 FastSpeech2 + HifiGAN, 使用的是 JETS 训练方法从而避免了传统二阶段语音合成系统中声学模型和声码器之间 mel 谱mismatch的问题。
 * Toolkit: ESPnet [[Repo](https://github.com/espnet/espnet)] [[Paper](https://arxiv.org/abs/1804.00015)]
