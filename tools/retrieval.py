@@ -24,7 +24,7 @@ retrieval_prompt_template = """
 不允许在答案中添加编造成分，答案请使用中文。
 """
 
-class RetrievalQATool():
+class RetrievalQATool:
     def __init__(self, llm, args):
         self.conf = args
         self.prompt_builder = Llama3PromptBuilder('你是一个智能机器人，可以检索文档并根据检索结果回答问题。')

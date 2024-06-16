@@ -14,7 +14,7 @@ format_city_prompt_template = """
 }}
 ```"""
 
-class WeatherTool():
+class WeatherTool:
 	def __init__(self, llm, args):
 		self.llm = llm
 		self.output_parser, self.format_instructions = build_output_parser({'city': '城市名称'})
