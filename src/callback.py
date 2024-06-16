@@ -24,7 +24,7 @@ class BaseStreamingStdOutCallbackHandler(StreamingStdOutCallbackHandler):
                     train_config=f"{args.tts_model_path}/config.yaml",
                     noise_scale=0.67,
                     noise_scale_dur=0.3,
-                    speed_control_alpha=1)
+                    speed_control_alpha=0.95)
         self.token_cache = ""
         self.message_queue = queue.Queue(maxsize=1000)
         self.pattern = re.compile(r'[^\d\u4e00-\u9fa5，。！？,.!?]')

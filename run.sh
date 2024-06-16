@@ -22,7 +22,7 @@ mode=chat
 agent_max_iters=5
 debug=false
 
-python main_asr.py \
+python main.py \
     --mode "$mode" \
     --llm_path "$llm_path" \
     --n_gpu_layers "$n_gpu_layers" \

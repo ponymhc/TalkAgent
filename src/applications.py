@@ -78,7 +78,7 @@ class BaseApplication(ABC):
 class ChatApplication(BaseApplication):
     def __init__(self, llm, args):
         super().__init__(llm, args)
-        prompt = Llama3PromptBuilder('你是一个智能助手').build_chat_prompt(chat_prompt_template)
+        prompt = Llama3PromptBuilder('你是一个智能助手，你的名字叫小助。').build_chat_prompt(chat_prompt_template)
         self.chains = ConversationChain(
             llm=self.llm,
             memory=ConversationBufferMemory(),
