@@ -20,7 +20,7 @@
 * Reranker: bge [[Huggingface](https://huggingface.co/BAAI/bge-reranker-base)]
 * Inference framework: Llama.cpp [[Repo](https://github.com/ggerganov/llama.cpp)]
 #### 二阶段检索增强生成
-[![Two stage RAG](https://github.com/ponymhc/AudioLlama/blob/main/image/two_stage_rag.png)](https://github.com/ponymhc/AudioAgent/blob/main/image/two_stage_rag.png)
+![Two stage RAG](https://github.com/ponymhc/AudioLlama/blob/main/image/two_stage_rag.png)
 ### TTS
 语音合成系统采用是使用ESPnet工具包训练的端到端的语音合成模型, 模型架构采用的是 VITS 端到端地进行文本到语音的合成。
 * Toolkit: ESPnet [[Repo](https://github.com/espnet/espnet)] [[Paper](https://arxiv.org/abs/1804.00015)]
