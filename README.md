@@ -30,12 +30,9 @@ https://github.com/ponymhc/AudioAgent/assets/134651366/36a7c7d2-a8c8-4994-b207-f
 ![Generator_loss](https://github.com/ponymhc/AudioAgent/blob/main/image/vits_generator_loss.png)
 ![Generator_mel_loss](https://github.com/ponymhc/AudioAgent/blob/main/image/vits_generator_mel_loss.png)
 ## 使用
-语言模型使用了Llama.cpp进行部署推理，在使用前请确保已经完成Llama.cpp的编译。
+语言模型使用了Llama.cpp进行部署推理，请先安装llama-cpp-python，强烈建议使用CUDA编译版本。
 ```
-git clone git@github.com:ggerganov/llama.cpp.git
-cd llama.cpp
-cmake -B build -DLLAMA_CUDA=ON
-cmake --build build --config Release
+CMAKE_ARGS="-DLLAMA_CUBLAS=on" pip install llama-cpp-python --force-reinstall --upgrade --no-cache-dir
 ```
 安装运行所需依赖项。
 ```
