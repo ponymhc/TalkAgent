@@ -8,11 +8,11 @@ https://github.com/ponymhc/AudioAgent/assets/134651366/36a7c7d2-a8c8-4994-b207-f
 3. TTS: 语音合成系统，对话系统的输出文本合成为普通话语音并可以与文本同时进行流式输出。
 ## 功能介绍
 ### ASR
-语音识别系统是使用使用 fast-Whisper 部署的 whisper-small 模型，可在CPU上快速进行推理。
-* Toolkit: ESPnet [[Repo](https://github.com/espnet/espnet)] [[Paper](https://arxiv.org/abs/1804.00015)]
-* Model: Faster-Whisper [[Repo](https://github.com/SYSTRAN/faster-whisper)] [[Paper](https://arxiv.org/abs/2212.04356)]
+语音识别系统是由语音活动检测和端到端语音识别模型构成，VAD使用的是py-webrtcvad，语音识别模型是基于 fast-Whisper 部署的 whisper-small 模型，可在CPU上进行低延迟推理。
+* VAD: Py-Webrtcvad [[Repo](https://github.com/wiseman/py-webrtcvad)]
+* ASR: Faster-Whisper [[Repo](https://github.com/SYSTRAN/faster-whisper)] [[Paper](https://arxiv.org/abs/2212.04356)]
 ### ChatBot
-聊天机器人是基于 Llama-3-Chinese-Instruct 8 bit 量化版本构建的, 在此基础上使用 Langchain 构建了一个主动型 Agent, 可以根据用户输入进行自主决策采用的行为，包括二阶段的知识库检索增强生成，工具调用，以便更智能化地回答用户问题。   
+聊天机器人是基于 Llama-3-Chinese-Instruct 8 bit 量化版本构建的, 在此基础上使用 Langchain 构建了一个主动型 Agent, 可以根据用户输入进行自主决策采用的行为，支持包括二阶段的知识库检索增强生成以及其他工具的调用，以便更智能化地回答用户问题。   
 * Tookit: Langchain [[Repo](https://github.com/langchain-ai/langchain)] [[Homepage](https://www.langchain.com/)]
 * LLM: Llama-3-Chinese-Instruct [[Repo](https://github.com/ymcui/Chinese-LLaMA-Alpaca-3)]
 * Embedding: gte [[Huggingface](https://huggingface.co/thenlper/gte-large-zh)]
