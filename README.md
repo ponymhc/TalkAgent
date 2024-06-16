@@ -16,22 +16,19 @@
 聊天机器人是基于 Llama-3-Chinese-Instruct 8 bit 量化版本构建的, 在此基础上使用 Langchain 构建了一个主动型 Agent, 可以根据用户输入进行自主决策采用的行为，包括二阶段的知识库检索增强生成，工具调用，以便更智能化地回答用户问题。   
 * Tookit: Langchain [[Repo](https://github.com/langchain-ai/langchain)] [[Homepage](https://www.langchain.com/)]
 * LLM: Llama-3-Chinese-Instruct [[Repo](https://github.com/ymcui/Chinese-LLaMA-Alpaca-3)]
-* Embedding:
-* Reranker
+* Embedding: gte [[Huggingface](https://huggingface.co/thenlper/gte-large-zh)]
+* Reranker: bge [[Huggingface](https://huggingface.co/BAAI/bge-reranker-base)]
 * Inference framework: Llama.cpp [[Repo](https://github.com/ggerganov/llama.cpp)]
 #### 二阶段检索增强生成
 ![Two stage RAG](https://github.com/ponymhc/AudioLlama/blob/main/image/two_stage_rag.png)
 ### TTS
-语音合成系统采用是使用ESPnet工具包训练的端到端的语音合成模型, 模型架构采用的是 FastSpeech2 + HifiGAN, 使用的是 JETS 训练方法从而避免了传统二阶段语音合成系统中声学模型和声码器之间 mel 谱mismatch的问题。
+语音合成系统采用是使用ESPnet工具包训练的端到端的语音合成模型, 模型架构采用的是 VITS 端到端地进行文本到语音的合成。
 * Toolkit: ESPnet [[Repo](https://github.com/espnet/espnet)] [[Paper](https://arxiv.org/abs/1804.00015)]
 * Dataset: CSMSC [[Homepage](https://www.data-baker.com/open_source.html)]
-* Model: FastSpeech2 + HifiGAN
-  * FastSpeech2 [[Paper](https://arxiv.org/abs/2006.04558)]
-  * HifiGAN [[Repo](https://github.com/jik876/hifi-gan)] [[Paper](https://arxiv.org/abs/2010.05646)]
-* Training Method: JETS [[Repo](https://github.com/imdanboy/jets)] [[Paper](https://arxiv.org/abs/2203.16852)]
+* Model: VITS [[Repo](https://github.com/jaywalnut310/vits)] [[Paper](https://arxiv.org/abs/2106.06103)]
 
 ## 使用
-模型使用了Llama.cpp进行部署推理，在使用前请确保已经完成Llama.cpp的编译。
+语言模型使用了Llama.cpp进行部署推理，在使用前请确保已经完成Llama.cpp的编译。
 ```
 git clone git@github.com:ggerganov/llama.cpp.git
 cd llama.cpp
