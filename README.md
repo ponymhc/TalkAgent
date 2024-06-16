@@ -26,6 +26,10 @@
 * Toolkit: ESPnet [[Repo](https://github.com/espnet/espnet)] [[Paper](https://arxiv.org/abs/1804.00015)]
 * Dataset: CSMSC [[Homepage](https://www.data-baker.com/open_source.html)]
 * Model: VITS [[Repo](https://github.com/jaywalnut310/vits)] [[Paper](https://arxiv.org/abs/2106.06103)]
+#### 训练日志
+![Discriminator_loss](https://github.com/ponymhc/AudioAgent/blob/main/image/vits_discriminator_loss.png)
+![Generator_loss](https://github.com/ponymhc/AudioAgent/blob/main/image/vits_generator_loss.png)
+![Generator_mel_loss](https://github.com/ponymhc/AudioAgent/blob/main/image/vits_generator_mel_loss.png)
 
 ## 使用
 语言模型使用了Llama.cpp进行部署推理，在使用前请确保已经完成Llama.cpp的编译。
