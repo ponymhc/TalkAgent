@@ -17,72 +17,14 @@ import re
 DEFAULT_ANSWER_PREFIX_TOKENS = ["Final", "Answer", ":"]
 
 class BaseStreamingStdOutCallbackHandler(StreamingStdOutCallbackHandler):
-    def __init__(self, args):
-        super().__init__()
-        self.args=args
-        self.t2s = Text2Speech(model_file=f"{args.tts_model_path}/model.pth",
-                    train_config=f"{args.tts_model_path}/config.yaml",
-                    noise_scale=0.67,
-                    noise_scale_dur=0.3,
-                    speed_control_alpha=1)
-        self.token_cache = ""
-        self.message_queue = queue.Queue(maxsize=1000)
-        self.pattern = re.compile(r'[^\d\u4e00-\u9fa5，。！？,.!?]')
-        self.RATE=self.t2s.fs
-        self.CHANNELS=1
-        
-        self.p = pyaudio.PyAudio()
-        self.stream = self.p.open(format=pyaudio.paInt16,
-                        channels=self.CHANNELS,
-                        rate=self.RATE,
-                        output=True)
-    
-    def _number2char(self, text):
-        pattern = r'-?\d+(\.\d+)?'
+    def __init__():
+        pass
 
-        def increment_number(match):
-            num_str = match.group(0)
-            return cn2an.an2cn(num_str)
+class ChatStreamingStdOutCallbackHandler(StreamingStdOutCallbackHandler):
+    def __init__():
+        pass
 
-        new_text = re.sub(pattern, increment_number, text)
-        return new_text
-
-    def clean_text(self, text):
-        text = text.replace('\n','').replace('，','。').replace('：','。')
-        text = self.pattern.sub('', text)
-        text = self._number2char(text)
-        return text
-    
-    def consumer(self):
-        while True:
-            message = self.message_queue.get()
-            clean_message = self.clean_text(message)
-            wav = self.t2s(clean_message)['wav'].view(-1).cpu().numpy()
-            audio_data_pcm = (wav * 32767).astype(np.int16)
-            self.stream.write(audio_data_pcm.tobytes())
-        
-
-class ChatStreamingStdOutCallbackHandler(BaseStreamingStdOutCallbackHandler):
-    def __init__(self, args):
-        super().__init__(args=args)
-    
-    def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
-        """Run on new LLM token. Only available when streaming is enabled."""
-        sys.stdout.write(token)
-        sys.stdout.flush()
-
-        # 分流到音频输出
-        matched = re.finditer('[，：。？！!?]', token)
-        punctuation_indices = [m.start() for m in matched]
-        self.token_cache += token
-        if punctuation_indices:
-            absolute_index = punctuation_indices[0] + len(self.token_cache) - len(token)
-            self.message_queue.put(self.token_cache[:absolute_index + 1])
-            self.token_cache = self.token_cache[absolute_index + 1:]
-    
-
-
-class AgentFinalStreamingStdOutCallbackHandler(BaseStreamingStdOutCallbackHandler):
+class AgentFinalStreamingStdOutCallbackHandler(StreamingStdOutCallbackHandler):
     """Callback handler for streaming in agents.
     Only works with agents using LLMs that support streaming.
 
@@ -108,7 +50,7 @@ class AgentFinalStreamingStdOutCallbackHandler(BaseStreamingStdOutCallbackHandle
         answer_prefix_tokens: Optional[List[str]] = None,
         strip_tokens: bool = True,
         stream_prefix: bool = False,
-        args=None
+        args = None
     ) -> None:
         """Instantiate FinalStreamingStdOutCallbackHandler.
 
@@ -120,7 +62,7 @@ class AgentFinalStreamingStdOutCallbackHandler(BaseStreamingStdOutCallbackHandle
                 reached)
             stream_prefix: Should answer prefix itself also be streamed?
         """
-        super().__init__(args=args)
+        super().__init__()
         if answer_prefix_tokens is None:
             self.answer_prefix_tokens = DEFAULT_ANSWER_PREFIX_TOKENS
         else:
@@ -137,6 +79,24 @@ class AgentFinalStreamingStdOutCallbackHandler(BaseStreamingStdOutCallbackHandle
         self.strip_tokens = strip_tokens
         self.stream_prefix = stream_prefix
         self.answer_reached = False
+
+        self.args=args
+        self.t2s = Text2Speech(model_file=f"{args.tts_model_path}/train.total_count.ave_10best.pth",
+                    train_config=f"{args.tts_model_path}/config.yaml",
+                    noise_scale=0.667,
+                    noise_scale_dur=0.8,
+                    speed_control_alpha=0.9)
+        self.token_cache = ""
+        self.message_queue = queue.Queue(maxsize=1000)
+        self.pattern = re.compile(r'[^\d\u4e00-\u9fa5，。！？,.!?]')
+        self.RATE=self.t2s.fs
+        self.CHANNELS=1
+        
+        self.p = pyaudio.PyAudio()
+        self.stream = self.p.open(format=pyaudio.paInt16,
+                        channels=self.CHANNELS,
+                        rate=self.RATE,
+                        output=True)
 
     def on_llm_start(
         self, serialized: Dict[str, Any], prompts: List[str], **kwargs: Any
@@ -172,3 +132,27 @@ class AgentFinalStreamingStdOutCallbackHandler(BaseStreamingStdOutCallbackHandle
                 absolute_index = punctuation_indices[0] + len(self.token_cache) - len(token)
                 self.message_queue.put(self.token_cache[:absolute_index + 1])
                 self.token_cache = self.token_cache[absolute_index + 1:]
+    
+    def _number2char(self, text):
+        pattern = r'-?\d+(\.\d+)?'
+
+        def increment_number(match):
+            num_str = match.group(0)
+            return cn2an.an2cn(num_str)
+
+        new_text = re.sub(pattern, increment_number, text)
+        return new_text
+
+    def clean_text(self, text):
+        text = text.replace('\n','').replace('，','。').replace('：','。')
+        text = self.pattern.sub('', text)
+        text = self._number2char(text)
+        return text
+    
+    def consumer(self):
+        while True:
+            message = self.message_queue.get()
+            clean_message = self.clean_text(message)
+            wav = self.t2s(clean_message)['wav'].view(-1).cpu().numpy()
+            audio_data_pcm = (wav * 32767).astype(np.int16)
+            self.stream.write(audio_data_pcm.tobytes())

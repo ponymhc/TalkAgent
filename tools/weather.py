@@ -15,7 +15,7 @@ format_city_prompt_template = """
 ```"""
 
 class WeatherTool():
-	def __init__(self, llm):
+	def __init__(self, llm, args):
 		self.llm = llm
 		self.output_parser, self.format_instructions = build_output_parser({'city': '城市名称'})
 		self.prompt_builder = Llama3PromptBuilder('你是一个智能助手，可以根据城市名称查询天气信息和天气预报。')
@@ -31,7 +31,7 @@ class WeatherTool():
 	def get_weather_info(self, schema):
 		url = 'http://t.weather.sojson.com/api/weather/city/'
 		city = schema['city']
-		city = city.replace('市','')
+		city = city.replace('市','').replace('区','')
 		city_code = self.cities.get(city)
 		if city_code is None:
 			return {}
@@ -40,12 +40,13 @@ class WeatherTool():
 			d = response.json()
 			if(d['status'] == 200):
 				return {
-					'湿度': d['data']['shidu'],
-					'pm25': d['data']['pm25'],
-					'pm10': d['data']['pm10'],
-					'空气质量': d['data']['quality'],
-					'温度': d['data']['wendu']
-				}
+					'final_answer': f"""{city}今天的温度是{d['data']['wendu']}度，
+					湿度是{d['data']['shidu']}，
+					二点五微米颗粒物为{d['data']['pm25']}，
+					十微米颗粒物为{d['data']['pm10']}，
+					空气质量为{d['data']['quality']}"""
+					}
+				
 			else:
 				return {}
 		except requests.exceptions.Timeout:

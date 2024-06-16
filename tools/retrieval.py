@@ -25,7 +25,7 @@ retrieval_prompt_template = """
 """
 
 class RetrievalQATool():
-    def __init__(self, args, llm):
+    def __init__(self, llm, args):
         self.conf = args
         self.prompt_builder = Llama3PromptBuilder('你是一个智能机器人，可以检索文档并根据检索结果回答问题。')
         self.prompt = self.prompt_builder.build_chat_prompt(retrieval_prompt_template)

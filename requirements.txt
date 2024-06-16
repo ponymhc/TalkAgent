@@ -1,0 +1,12 @@
+espnet==202402
+langchain==0.2.1
+langchain-community==0.2.1
+langchain-core==0.2.3
+sentence-transformers==2.7.0
+transformers==4.41.2
+spacy==3.7.5
+scipy==1.10.0
+faiss-gpu
+PyAudio
+cn2an==0.5.22
+openai-whisper==20230308
