@@ -1,4 +1,7 @@
 models/
 faiss_db/
+data/
 tools/email_config.json
+tools/city_code.json
+tools/contact_list.json
 **/__pycache__
