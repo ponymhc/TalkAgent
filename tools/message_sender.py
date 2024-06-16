@@ -42,7 +42,7 @@ do not include other content except this json!!!
 """
 
 
-class EmailTool():
+class EmailTool:
     def __init__(self, llm, args):
         self.llm = llm
         self.email_config = 'tools/email_config.json'
