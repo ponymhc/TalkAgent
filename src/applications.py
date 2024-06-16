@@ -32,7 +32,7 @@ Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can repeat N times)
 Thought: I now know the final answer
 Final Answer: the final answer to the original input question
-when you get final_answer please return that, do not go on thought.
+When you find the keyword "final_answer" in the context, please return this as the Final Answer.
 
 Begin!
 

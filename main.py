@@ -35,13 +35,13 @@ def conversation(application, args):
             with Transcriber(model_size=args.asr_model_path) as transcriber:
                 for audio in recorder:
                     for seg in transcriber(audio):
-                        print('> ' + seg)
+                        print('\n> ' + seg + '\n')
                         try:
                             application(seg)
+                            print('\n')
                         except:
                             time.sleep(1)
                             print("**************************请不要密集提问！**************************")
-                        print()
     except KeyboardInterrupt:
         print("KeyboardInterrupt: terminating...")
     except Exception as e:

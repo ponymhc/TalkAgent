@@ -39,12 +39,14 @@ class WeatherTool():
 			response = requests.get(url + city_code, timeout=(0.1,0.1))
 			d = response.json()
 			if(d['status'] == 200):
+				if '度' in d['data']['quality']:
+					quality = d['data']['quality'] + '污染'
 				return {
 					'final_answer': f"""{city}今天的温度是{d['data']['wendu']}度，
 					湿度是{d['data']['shidu']}，
-					二点五微米颗粒物为{d['data']['pm25']}，
-					十微米颗粒物为{d['data']['pm10']}，
-					空气质量为{d['data']['quality']}"""
+					2.5微米颗粒物为{d['data']['pm25']}，
+					10微米颗粒物为{d['data']['pm10']}，
+					空气质量为{quality}"""
 					}
 				
 			else:

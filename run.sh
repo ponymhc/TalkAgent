@@ -9,7 +9,7 @@ temperature=0.0
 embedding_path="models/gte-large-zh"
 reranker_path="models/bge-reranker-base"
 asr_model_path="models/faster-whisper-small"
-tts_model_path="models/full_band_vits"
+tts_model_path="models/vits"
 
 # retreival relative
 docs_path="data/wiki"
@@ -18,7 +18,7 @@ stage1_top_k=20
 stage2_top_k=3
 
 # run relative ['chat', 'agent']
-mode=chat
+mode=agent
 agent_max_iters=5
 debug=false
 
@@ -28,7 +28,7 @@ python main.py \
     --n_gpu_layers "$n_gpu_layers" \
     --n_ctx "$n_ctx" \
     --asr_model_path "$asr_model_path" \
-    --tts_model_path "$tts_model_path"
+    --tts_model_path "$tts_model_path" \
     --max_tokens "$max_tokens" \
     --temperature "$temperature" \
     --embedding_path "$embedding_path" \

@@ -47,11 +47,11 @@ class RetrievalQATool():
     
     def _init_db(self):
         if not os.path.isdir(self.conf.db_path):
+            print(self.conf.db_path)
             try:
                 docs = []
                 for doc in os.listdir(self.conf.docs_path):
                     if doc.endswith('.txt'):
-                        print(doc)
                         loader = TextLoader(f'{self.conf.docs_path}/{doc}')
                         doc = loader.load()
                         docs.extend(doc)

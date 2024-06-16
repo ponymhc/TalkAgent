@@ -5,6 +5,7 @@ from email.utils import parseaddr, formataddr
 from src.utils import build_output_parser, Llama3PromptBuilder
 from langchain.agents import Tool
 import json
+import re
 
 # format_email_prompt_template = """
 # 从下面的文本中提取出收件人邮箱地址，邮件主题以及邮件内容。
@@ -16,26 +17,28 @@ import json
 # 输出应该是遵守以下模式的代码片段，包括开头和结尾的"```json"和"```":
 # ```json
 # {{
-# 	"receiver_addr": string  // 收件人邮箱地址,
+# 	"contact": string  // 收件人姓名,
 #     "subject": string // 邮件主题,
 #     "content": string // 邮件内容,
 # }}
 # ```"""
 
-format_email_prompt_template = """Extract the recipient, the subject of the email, and the content of the email from the text below.
+format_email_prompt_template = """Extract the contact, the subject of the email, and the content of the email from the text below.
 
 Note: If the subject of the email is not explicitly mentioned in the text, summarize an appropriate subject based on the content of the email.
 
 Text:
 {question}
-The output should be a code snippet that adheres to the following pattern, including the opening and closing "```json" and "```":
+The output must be a code snippet that adheres to the following pattern, including the opening and closing "```json" and "```":
 ```json
 {{
-    "recipient": string  // recipient,
+    "contact": string  // must a name of contact,
     "subject": string // subject of the email,
     "content": string // content of the email,
 }}
 ```
+
+do not include other content except this json!!!
 """
 
 
@@ -44,7 +47,7 @@ class EmailTool:
         self.llm = llm
         self.email_config = 'tools/email_config.json'
         self.output_parser, self.format_instructions = build_output_parser({
-                                                                            "recipient":'收件人',
+                                                                            "contact":'收件人',
                                                                             "subject":'邮件主题',
                                                                             "content":'邮件内容',
                                                                             })
@@ -77,7 +80,9 @@ class EmailTool:
 
             smtpObj.login(self.sender_addr, self.secret_key)
             from_addr = self.sender_addr
-            recipient_name = schema['recipient']
+            for contact in self.contact_list:
+                if contact in schema['contact']:
+                    recipient_name = contact
             to_addr = self.contact_list[recipient_name]
 
             sender_name = from_addr.split('@')[0]
@@ -93,13 +98,13 @@ class EmailTool:
 
             smtpObj.quit()
             return {
-                'success': True,
-                'final_answer': '邮件发送成功。'
+                'status': 'successful',
+                'final_answer': f'已成功将邮件发送至{recipient_name}的邮箱，如果需要发送其他邮件，请随时吩咐。'
             }
         except:
             return {
-                'success': False,
-                'final_answer': '邮件发送失败，请重新尝试'
+                'status': 'failed',
+                'final_answer': '邮件发送失败，请重新尝试。'
             }
     
     def tool_wrapper(self):
@@ -107,7 +112,7 @@ class EmailTool:
             name='Email',
             func=self.chain.invoke,
             description="""
-用来发送邮件的Action，接受以下三个Action Inputs: 收件人(recipient)、邮件内容(content)、邮件主题(subject)。
+用于发送邮件信息的Action，接受以下三个Action Inputs: contact、content、subject。
 """
         )
         return tool
