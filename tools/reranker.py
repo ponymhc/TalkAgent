@@ -14,7 +14,7 @@ class Reranker(BaseDocumentCompressor):
 
     def __init__(
         self, 
-        model_name: str = '/home/pony/workspace/nlp/pretrained_model/bge-reranker-base',
+        model_name: str = '',
         top_k: int = 3
     ):
         super().__init__()
